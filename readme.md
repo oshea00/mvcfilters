@@ -12,7 +12,7 @@ There are other less invasive workarounds to this problem:
 - Allows constructor on MyFilter to pass in dependencies.
 - Drawback: there's no way to easily configure filter behavior on a case-by-case basis.
 3. You can use a TypeFilter, similar to ServiceFilter, but allows arguments to be passed as objects.
-- Drawback: messy syntax, no compiler checks.
+- Drawback: messy syntax, limited compiler checks.
 4. Implement IFilterFactory and write your own factory to configure your filter.
 - Now you have to unit test two things and have similar problem to the original Filter.
 5. I've seen global filters suggested, but that seems like killing the patient in order to cure them...
