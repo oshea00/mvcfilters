@@ -1,37 +1,37 @@
-using filter.Infrastructure;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
+using Microsoft.AspNetCore.Routing;
 using NUnit.Framework;
-using System;
+using NSubstitute;
+using filter.Infrastructure;
 
-namespace Tests
+namespace FIlterTests
 {
-    public class Tests
+    public class Filters
     {
-
-        [SetUp]
-        public void SetUp()
-        {
-        }
-
         [Test]
-        public void IsTrue()
+        public void NotHttpsChecksRequest()
         {
-            Assert.IsTrue(true);
+            // Arrange
+            var authContext = Substitute.For<AuthorizationFilterContext>(
+                    Substitute.For<ActionContext>(
+                        Substitute.For<HttpContext>(),
+                        Substitute.For<RouteData>(),
+                        Substitute.For<ActionDescriptor>()
+                    ),
+                    new List<IFilterMetadata>()
+               );
+            authContext.HttpContext.Request.IsHttps.Returns(false);
+            // Act
+            var filterAttr = new HttpsOnlyAttribute();
+            filterAttr.OnAuthorization(authContext);
+            // Assert
+            var result = authContext.Result as StatusCodeResult;
+            Assert.AreEqual(StatusCodes.Status403Forbidden, result.StatusCode);
         }
 
-        [Test]
-        public void FilterChecksIfNotHttpsRequest()
-        {
-            //var authContext = Substitute.For<AuthorizationFilterContext>();
-            //var filterAttr = new HttpsOnlyAttribute();
-            //authContext.HttpContext.Request.IsHttps.Returns(false);
-            //filterAttr.OnAuthorization(authContext);
-            //var result = authContext.Received().Result;
-
-        }
     }
 }

@@ -12,11 +12,9 @@ namespace filter.Infrastructure
 {
     public class HttpsOnlyAttribute : Attribute, IAuthorizationFilter
     {
-        public IHttpsOnlyFilter filter;
-
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if (!context.HttpContext.Request.IsHttps)
+            if (context.HttpContext.Request.IsHttps == false)
             {
                 context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
             }

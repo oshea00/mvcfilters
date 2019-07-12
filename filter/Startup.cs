@@ -36,7 +36,6 @@ namespace filter
             services.AddMvc(
                 // options=>options.Filters.Add<HttpsOnlyAttribute>()
             ).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddTransient<IHttpsOnlyFilter, HttpsOnlyFilter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,10 +52,11 @@ namespace filter
                 app.UseHsts();
             }
 
+            // Commented out because example "HttpsOnly"
+            // filter checks for non-http requests.
             // app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
